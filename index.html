@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="Vridhi_logo.jpeg">
+    <title>Vridhi - Financial Growth Engine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="main-content"> 
+        
+        <div id="login-section" class="app-section active">
+            <div class="login-card">
+                <div class="brand-header">
+                    <div class="animated-logo">
+                        <span class="letter" style="--delay: 0s">V</span>
+                        <span class="letter" style="--delay: 0.15s">r</span>
+                        <span class="letter" style="--delay: 0.3s">i</span>
+                        <span class="letter" style="--delay: 0.45s">d</span>
+                        <span class="letter" style="--delay: 0.6s">h</span>
+                        <span class="letter" style="--delay: 0.75s">i</span>
+                    </div>
+                </div>
+                <p class="subtitle">Your Financial Growth Engine</p>
+
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="user_email">Email</label>
+                        <input type="email" name="User_email" id="user_email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="user_password">Password</label>
+                        <input type="password" name="User_email_Password" id="user_password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="age_check" id="age_check" required>
+                        <label for="age_check">I am 18+ and accept the <a href="#" id="open-terms">Terms and Conditions</a>.</label>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">Log In</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="userinfo-section" class="app-section">
+            <div class="login-card info-card">
+                <div class="animated-logo" style="gap: 10px;">
+                <span class="letter" style="--delay: 0s">Tell</span>
+                <span class="letter" style="--delay: 0.15s">Us</span>
+                <span class="letter" style="--delay: 0.3s">About</span>
+                <span class="letter" style="--delay: 0.45s">You</span>
+            </div>
+                <p class="subtitle">Let's personalize your Vridhi experience.</p>
+
+                <form id="userinfo-form">
+                    <div class="input-group">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name" placeholder="E.g. Rahul Sharma" required>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group" style="flex: 1; margin-right: 10px;">
+                            <label for="user_age">Age</label>
+                            <input type="number" id="user_age" placeholder="Age" min="18" required>
+                        </div>
+                        <div class="input-group" style="flex: 2;">
+                            <label for="mobile_num">Mobile Number</label>
+                            <input type="tel" id="mobile_num" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Select Category</label>
+                        <div class="category-grid" id="category-grid">
+                            <div class="category-card" data-category="Student">Student</div>
+                            <div class="category-card" data-category="Employee">Salaried Employee</div>
+                            <div class="category-card" data-category="Business">Business Owner</div>
+                            <div class="category-card" data-category="Housewife">Housewife</div>
+                            <div class="category-card" data-category="Farmer">Farmer</div>
+                        </div>
+                        <input type="hidden" id="selected_category" required>
+                    </div>
+
+                    <div id="dynamic-input-container" class="input-group" style="display: none;">
+                        </div>
+
+                    <button type="submit" class="login-btn">Submit & Continue</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="dashboard-section" class="app-section">
+            <div class="login-card dashboard-card">
+                <div class="brand-header">
+                    <h2 style="color: var(--primary);">Welcome to Vridhi!</h2>
+                </div>
+                <div id="dashboard-content" style="text-align: center; margin-top: 20px;">
+                    </div>
+                <button id="logout-btn" class="login-btn" style="margin-top: 30px; background-color: var(--secondary);">Log Out</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="overlay"></div> 
+    <div id="terms-panel">
+        <div class="terms-header">
+            <h5>Terms and Conditions</h5>
+            <button id="close-terms">&times;</button>
+        </div>
+        <div class="terms-body">
+            <p><strong>1. Acceptance & Updates:</strong> By using Vridhi, you agree to these terms...</p>
+            <p><strong>2. Educational Use Only:</strong> The calculators and projections are strictly for informational purposes...</p>
+            <p><strong>3. User Accountability & Privacy:</strong> You are solely responsible for the accuracy of your inputs...</p>
+            <p><strong>4. Property & Protection:</strong> Vridhi owns all site content and code...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

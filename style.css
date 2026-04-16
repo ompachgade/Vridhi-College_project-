@@ -1,0 +1,217 @@
+/* --- Color Palette & Setup --- */
+:root {
+    --primary: #50C878;    /* Emerald Green */
+    --secondary: #0A2342;  /* Pacific Navy */
+    --accent: #D4AF37;     /* Auspicious Gold */
+    --bg-white: #FFFDF5;   /* Ivory Silk (Main card backgrounds) */
+    --text-light: #FFFDF5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--text-light);
+    color: var(--secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto; /* Changed from hidden so tall forms can scroll */
+    padding: 20px 0;
+}
+
+/* --- SPA Section Logic --- */
+.app-section {
+    display: none; /* Hide all by default */
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.app-section.active {
+    display: block; /* Show only the active one */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Main Login UI --- */
+#main-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.login-card {
+    background-color: var(--bg-white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(10, 34, 57, 0.1);
+    width: 380px; /* Slightly wider for the new form */
+}
+
+/* --- Continuous Logo Animation --- */
+.brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.animated-logo {
+    /* display: flex; */
+    color: var(--primary);
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.animated-logo .letter {
+    opacity: 0; 
+    animation: loopType 4s infinite ease-in-out;
+    animation-delay: var(--delay);
+}
+
+@keyframes loopType {
+    0%, 15% { opacity: 0; transform: translateY(5px); }
+    25%, 75% { opacity: 1; transform: translateY(0); }
+    85%, 100% { opacity: 0; transform: translateY(-5px); }
+}
+
+/* --- Form Styling --- */
+.subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: gray;
+    margin-bottom: 30px;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--secondary);
+}
+
+.input-group input, .input-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border 0.3s;
+    font-size: 0.95rem;
+}
+
+.input-group input:focus, .input-group select:focus {
+    border-color: var(--primary);
+}
+
+/* --- Category Cards --- */
+.category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.category-card {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: gray;
+}
+
+.category-card:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.category-card.active {
+    border-color: var(--primary);
+    background-color: rgba(80, 200, 120, 0.1); /* Light green tint */
+    color: var(--primary);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+}
+
+.checkbox-group a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary);
+    color: var(--bg-white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: var(--secondary);
+}
+
+/* --- Slide-Up Terms & Conditions --- */
+#overlay { 
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(10, 34, 57, 0.6);
+    z-index: 999; opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+#overlay.active { opacity: 1; pointer-events: all; }
+#terms-panel {
+    position: fixed; bottom: -100%; left: 0; width: 100%;
+    background-color: var(--bg-white);
+    border-top-left-radius: 20px; border-top-right-radius: 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    z-index: 1000; transition: bottom 0.4s ease-in-out;
+    padding: 20px 30px 40px; max-height: 70vh; overflow-y: auto;
+}
+#terms-panel.active { bottom: 0; }
+.terms-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;
+}
+.terms-header h5 { font-size: 1.2rem; color: var(--secondary); }
+#close-terms { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--secondary); }
+.terms-body p { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.5; color: #333; }
+
+/* --- Specific override for the User Info Card --- */
+.info-card {
+    width: 450px; /* Increased width to fit two columns side-by-side */
+    max-width: 95vw; /* Keeps it responsive on small phone screens */
+}
+
