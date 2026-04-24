@@ -1,3 +1,23 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB-uOtagtW6SIIevUbmZNNvmBzmahShHT0",
+    authDomain: "vridhi-d9d3d.firebaseapp.com",
+    projectId: "vridhi-d9d3d",
+    storageBucket: "vridhi-d9d3d.firebasestorage.app",
+    messagingSenderId: "1089765931043",
+    appId: "1:1089765931043:web:1c190674058da9e096d996",
+    measurementId: "G-E6QX1HRHZ4"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 document.addEventListener("DOMContentLoaded", () => {
     
     // --- 1. Terms and Conditions Slide-Up Logic ---
@@ -39,9 +59,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 3. Login to User Info ---
     const loginForm = document.getElementById("login-form");
-    loginForm?.addEventListener("submit", (event) => {
+    loginForm?.addEventListener("submit", async (event) => {
         event.preventDefault(); 
-        switchSection('userinfo-section'); 
+        const email = document.getElementById("user_email").value;
+        const password = document.getElementById("user_password").value;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                renderDashboard(userData);
+                switchSection('dashboard-section');
+            } else {
+                switchSection('userinfo-section');
+            }
+        } catch (error) {
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    switchSection('userinfo-section');
+                } catch (regError) {
+                    alert("Registration Error: " + regError.message);
+                }
+            } else {
+                alert("Login Error: " + error.message);
+            }
+        }
     });
 
     // --- 4. User Info: Category Selection & Dynamic Inputs ---
@@ -68,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 5. Submit User Info & Build Dashboard UI ---
     const userInfoForm = document.getElementById("userinfo-form");
-    userInfoForm?.addEventListener("submit", (event) => {
+    userInfoForm?.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         if(!hiddenCategoryInput.value) {
@@ -76,15 +124,27 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const user = auth.currentUser;
+        if (!user) {
+            alert("No user is logged in!");
+            return;
+        }
+
         const userData = {
             name: document.getElementById('full_name').value,
+            email: user.email,
             category: hiddenCategoryInput.value,
             income: Number(document.getElementById('exact_income').value)
         };
 
-        localStorage.setItem('vridhiUser', JSON.stringify(userData));
-        renderDashboard(userData);
-        switchSection('dashboard-section');
+        try {
+            await setDoc(doc(db, "users", user.uid), userData); 
+            console.log("Data saved to Vridhi Database!");
+            renderDashboard(userData);
+            switchSection('dashboard-section');
+        } catch (error) {
+            alert("Error saving data: " + error.message);
+        }
     });
 
     // --- 6. Dashboard Generator Function ---
@@ -93,7 +153,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!dashboardContent) return; // Exit if on learn.html
 
         // Calculate 20-20-30-30 Logic
-        const inc = userData.income;
+        let inc = Number(userData.income);
+        if (isNaN(inc)) {
+            inc = 0; // Fallback if income is a string like "< ₹3L"
+        }
+
         const secureSavings = inc * 0.20;
         const emergencyShield = inc * 0.20;
         const homeEssentials = inc * 0.30;
@@ -123,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dashboardContent.innerHTML = `
             <div class="dashboard-header">
                 <h2>Hello, ${userData.name}!</h2>
-                <div class="total-income">Total Input: ₹${inc.toLocaleString('en-IN')}</div>
+                <div class="total-income">Total Input: ₹${inc > 0 ? inc.toLocaleString('en-IN') : "Please Update Income"}</div>
             </div>
 
             <div class="allocation-grid">
